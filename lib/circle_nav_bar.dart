@@ -65,7 +65,7 @@ class CircleNavBar extends StatefulWidget {
     this.levels,
     this.activeLevelsStyle,
     this.inactiveLevelsStyle,
-    this.maxWidth = 660,
+    this.maxWidth,
   })  : assert(circleWidth <= height, "circleWidth <= height"),
         assert(activeIcons.length == inactiveIcons.length,
             "activeIcons.length and inactiveIcons.length must be equal!"),
@@ -85,11 +85,13 @@ class CircleNavBar extends StatefulWidget {
   /// can make responsive apps that show a full width bar or limit it to
   /// [maxWidth].
   ///
+  /// You are advised to use this whenever the Navbar is being rendered in a
+  /// width different from screenSize of the device.
   /// Parent Widget also must bind its width to [maxWidth].
   ///
   /// [E.g.] SizedBox(width: min(MediaQuery.of(context).size.width, maxWidth),
   /// child: CircleNavBar(...)),
-  final double maxWidth;
+  final double? maxWidth;
 
   /// Circle icon diameter
   ///
@@ -246,7 +248,9 @@ class _CircleNavBarState extends State<CircleNavBar>
 
   @override
   Widget build(BuildContext context) {
-    double deviceWidth = min(MediaQuery.of(context).size.width, widget.maxWidth);
+    double deviceWidth = widget.maxWidth != null
+    ? min(MediaQuery.of(context).size.width, widget.maxWidth!)
+    : MediaQuery.of(context).size.width;
     return Container(
       margin: widget.padding,
       width: deviceWidth,
